@@ -108,18 +108,325 @@ void sha256_transf(sha256_ctx *ctx, const unsigned char *message,
             wv[j] = ctx->h[j];
         }
 
-        for (j = 0; j < 64; j++) {
-            t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[j] + w[j];
-            wv[7] = wv[6];
-            t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
-            wv[6] = wv[5];
-            wv[5] = wv[4];
-            wv[4] = wv[3] + t1;
-            wv[3] = wv[2];
-            wv[2] = wv[1];
-            wv[1] = wv[0];
-            wv[0] = t1 + t2;
-        }
+		t1 = ctx->h[7] + SHA256_F2(ctx->h[4]) + CH(ctx->h[4], ctx->h[5], ctx->h[6]) + sha256_k[0] + w[0];
+		t2 = SHA256_F1(ctx->h[0]) + MAJ(ctx->h[0], ctx->h[1], ctx->h[2]);
+		wv[3] = ctx->h[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = ctx->h[6] + SHA256_F2(wv[3]) + CH(wv[3], ctx->h[4], ctx->h[5]) + sha256_k[1] + w[1];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], ctx->h[0], ctx->h[1]);
+		wv[2] = ctx->h[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = ctx->h[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], ctx->h[4]) + sha256_k[2] + w[2];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], ctx->h[0]);
+		wv[1] = ctx->h[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = ctx->h[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[3] + w[3];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = ctx->h[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[4] + w[4];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[5] + w[5];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[6] + w[6];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[7] + w[7];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
+
+		t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[8] + w[8];
+		t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
+		wv[3] = wv[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k[9] + w[9];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
+		wv[2] = wv[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k[10] + w[10];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
+		wv[1] = wv[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[11] + w[11];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = wv[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[12] + w[12];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[13] + w[13];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[14] + w[14];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[15] + w[15];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
+
+		t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[16] + w[16];
+		t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
+		wv[3] = wv[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k[17] + w[17];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
+		wv[2] = wv[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k[18] + w[18];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
+		wv[1] = wv[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[19] + w[19];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = wv[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[20] + w[20];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[21] + w[21];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[22] + w[22];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[23] + w[23];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
+
+		t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[24] + w[24];
+		t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
+		wv[3] = wv[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k[25] + w[25];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
+		wv[2] = wv[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k[26] + w[26];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
+		wv[1] = wv[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[27] + w[27];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = wv[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[28] + w[28];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[29] + w[29];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[30] + w[30];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[31] + w[31];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
+
+		t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[32] + w[32];
+		t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
+		wv[3] = wv[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k[33] + w[33];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
+		wv[2] = wv[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k[34] + w[34];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
+		wv[1] = wv[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[35] + w[35];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = wv[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[36] + w[36];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[37] + w[37];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[38] + w[38];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[39] + w[39];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
+
+		t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[40] + w[40];
+		t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
+		wv[3] = wv[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k[41] + w[41];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
+		wv[2] = wv[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k[42] + w[42];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
+		wv[1] = wv[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[43] + w[43];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = wv[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[44] + w[44];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[45] + w[45];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[46] + w[46];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[47] + w[47];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
+
+		t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[48] + w[48];
+		t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
+		wv[3] = wv[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k[49] + w[49];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
+		wv[2] = wv[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k[50] + w[50];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
+		wv[1] = wv[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[51] + w[51];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = wv[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[52] + w[52];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[53] + w[53];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[54] + w[54];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[55] + w[55];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
+
+		t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k[56] + w[56];
+		t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
+		wv[3] = wv[3] + t1;
+		wv[7] = t1 + t2;
+
+		t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k[57] + w[57];
+		t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
+		wv[2] = wv[2] + t1;
+		wv[6] = t1 + t2;
+
+		t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k[58] + w[58];
+		t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
+		wv[1] = wv[1] + t1;
+		wv[5] = t1 + t2;
+
+		t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k[59] + w[59];
+		t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
+		wv[0] = wv[0] + t1;
+		wv[4] = t1 + t2;
+
+		t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k[60] + w[60];
+		t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
+		wv[7] = wv[7] + t1;
+		wv[3] = t1 + t2;
+
+		t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k[61] + w[61];
+		t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
+		wv[6] = wv[6] + t1;
+		wv[2] = t1 + t2;
+
+		t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k[62] + w[62];
+		t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
+		wv[5] = wv[5] + t1;
+		wv[1] = t1 + t2;
+
+		t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k[63] + w[63];
+		t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
+		wv[4] = wv[4] + t1;
+		wv[0] = t1 + t2;
 
         for (j = 0; j < 8; j++) {
             ctx->h[j] += wv[j];
