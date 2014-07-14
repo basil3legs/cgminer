@@ -104,10 +104,6 @@ void sha256_transf(sha256_ctx *ctx, const unsigned char *message,
             SHA256_SCR(j);
         }
 
-        for (j = 0; j < 8; j++) {
-            wv[j] = ctx->h[j];
-        }
-
 		t1 = ctx->h[7] + SHA256_F2(ctx->h[4]) + CH(ctx->h[4], ctx->h[5], ctx->h[6]) + sha256_k[0] + w[0];
 		t2 = SHA256_F1(ctx->h[0]) + MAJ(ctx->h[0], ctx->h[1], ctx->h[2]);
 		wv[3] = ctx->h[3] + t1;
