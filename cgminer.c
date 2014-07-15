@@ -7092,7 +7092,23 @@ bool test_nonce(struct work *work, uint32_t nonce)
 {
 	uint32_t *hash_32 = (uint32_t *)(work->hash + 28);
 
-	rebuild_nonce(work, nonce);
+	uint32_t *work_nonce = (uint32_t *)(work->data + 64 + 12);
+
+	uint32_t *data32 = (uint32_t *)(work->data);
+	unsigned char swap[80];
+	uint32_t *swap32 = (uint32_t *)swap;
+	unsigned char hash1[32];
+
+//	rebuild_nonce(work, nonce);
+
+	*work_nonce = htole32(nonce);
+
+//	regen_hash(work);
+
+	flip80(swap32, data32);
+	sha256(swap, 80, hash1);
+	sha256(hash1, 32, (unsigned char *)(work->hash));
+
 	return (*hash_32 == 0);
 }
 
