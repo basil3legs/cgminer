@@ -357,6 +357,28 @@ static struct block *blocks = NULL;
 
 int swork_id;
 
+#define UNPACK32(x, str)                      \
+{                                             \
+    *((str) + 3) = (uint8_t) ((x)      );       \
+    *((str) + 2) = (uint8_t) ((x) >>  8);       \
+    *((str) + 1) = (uint8_t) ((x) >> 16);       \
+    *((str) + 0) = (uint8_t) ((x) >> 24);       \
+}
+
+#define PACK32(str, x)                        \
+{                                             \
+    *(x) =   ((uint32_t) *((str) + 3)      )    \
+           | ((uint32_t) *((str) + 2) <<  8)    \
+           | ((uint32_t) *((str) + 1) << 16)    \
+           | ((uint32_t) *((str) + 0) << 24);   \
+}
+
+#define SHA256_SCR(i)                         \
+{                                             \
+    w[i] =  SHA256_F4(w[i -  2]) + w[i -  7]  \
+          + SHA256_F3(w[i - 15]) + w[i - 16]; \
+}
+
 uint32_t sha256_h0[8] =
             {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
              0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
@@ -7154,7 +7176,6 @@ bool test_nonce(struct work *work, uint32_t nonce)
 //    sha256_final(&ctx, (unsigned char *)(work->hash));
 
 // void sha256_final(sha256_ctx *ctx, unsigned char *digest)
-// {
 
     block_nb = (1 + ((64 - 9) < (ctx.len % 64)));
 
@@ -7170,9 +7191,6 @@ bool test_nonce(struct work *work, uint32_t nonce)
     for (i = 0 ; i < 8; i++) {
         UNPACK32(ctx.h[i], &work->hash[i << 2]);
     }
-// }
-	
-	
 	
 	return (*hash_32 == 0);
 }
