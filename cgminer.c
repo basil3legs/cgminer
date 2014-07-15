@@ -7130,7 +7130,7 @@ bool test_nonce(struct work *work, uint32_t nonce)
 
     sha256_update(&ctx, hash1, 32);
 
-    sha256_final(&ctx, (unsigned char *)(work->hash));
+//    sha256_final(&ctx, (unsigned char *)(work->hash));
 
 // void sha256_final(sha256_ctx *ctx, unsigned char *digest)
 // {
