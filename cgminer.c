@@ -7511,8 +7511,11 @@ bool test_nonce(struct work *work, uint32_t nonce)
 	wv[4] = t1 + t2;
 
 	t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k1[60] + w[60];
-	t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
 	wv[7] = wv[7] + t1;
+
+	if (wv[7] != 2753508071) { return(false); };
+
+	t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
 	wv[3] = t1 + t2;
 
 	t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k1[61] + w[61];
@@ -7534,15 +7537,12 @@ bool test_nonce(struct work *work, uint32_t nonce)
 		ctx.h[j] += wv[j];
 	}
 
-
-
-
-
     for (i = 0 ; i < 8; i++) {
         UNPACK32(ctx.h[i], &work->hash[i << 2]);
     }
 	
-	return (*hash_32 == 0);
+//	return (*hash_32 == 0);
+	return (true);
 }
 
 /* For testing a nonce against an arbitrary diff */
