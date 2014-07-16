@@ -7146,8 +7146,8 @@ bool test_nonce(struct work *work, uint32_t nonce)
 	uint32_t wv[8];
 	uint32_t t1, t2;
 	sha256_ctx *ctxptr = &ctx;
-    unsigned int block_nb;
-    unsigned int pm_len;
+//    unsigned int block_nb;
+//    unsigned int pm_len;
     unsigned int len_b;
 	
 //	rebuild_nonce(work, nonce);
@@ -7177,16 +7177,19 @@ bool test_nonce(struct work *work, uint32_t nonce)
 
 // void sha256_final(sha256_ctx *ctx, unsigned char *digest)
 
-    block_nb = (1 + ((64 - 9) < (ctx.len % 64)));
+//    block_nb = 1;
 
-    len_b = (ctx.tot_len + ctx.len) << 3;
-    pm_len = block_nb << 6;
+//    len_b = (ctx.tot_len + ctx.len) << 3;
+//    pm_len = 64;
 
-    memset(ctx.block + ctx.len, 0, pm_len - ctx.len);
-    ctx.block[ctx.len] = 0x80;
-    UNPACK32(len_b, ctx.block + pm_len - 4);
+	memset(ctx.block + 33, 0, 31);
+	ctx.block[32] = 0x80;
+	ctx.block[62] = 0x01;
+//    memset(ctx.block + ctx.len, 0, 64 - ctx.len);
+//    ctx.block[ctx.len] = 0x80;
+//    UNPACK32(len_b, ctx.block + 64 - 4);
 
-    sha256_transf(&ctx, &ctx.block, block_nb);
+    sha256_transf(&ctx, &ctx.block, 1);
 
     for (i = 0 ; i < 8; i++) {
         UNPACK32(ctx.h[i], &work->hash[i << 2]);
