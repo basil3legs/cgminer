@@ -7140,7 +7140,7 @@ bool test_nonce(struct work *work, uint32_t nonce)
 	uint32_t *swap32 = (uint32_t *)swap;
 	unsigned char hash1[32];
     sha256_ctx ctx;
-	const unsigned char *shifted_message;
+//	const unsigned char *shifted_message;
 	int i, j;
 	uint32_t w[64];
 	uint32_t wv[8];
@@ -7148,7 +7148,7 @@ bool test_nonce(struct work *work, uint32_t nonce)
 	sha256_ctx *ctxptr = &ctx;
 //    unsigned int block_nb;
 //    unsigned int pm_len;
-    unsigned int len_b;
+//    unsigned int len_b;
     const unsigned char *sub_block;
 	
 //	rebuild_nonce(work, nonce);
@@ -7175,8 +7175,6 @@ bool test_nonce(struct work *work, uint32_t nonce)
 //	sha256_update(&ctx, hash1, 32);
 
 // void sha256_update(sha256_ctx *ctx, const unsigned char *message, unsigned int len)
-
-    const unsigned char *shifted_message;
 
     memcpy(ctx.block, hash1, 32);
 
