@@ -7149,7 +7149,7 @@ bool test_nonce(struct work *work, uint32_t nonce)
 //    unsigned int block_nb;
 //    unsigned int pm_len;
 //    unsigned int len_b;
-    const unsigned char *sub_block;
+//    const unsigned char *sub_block;
 	
 //	rebuild_nonce(work, nonce);
 
@@ -7200,15 +7200,43 @@ bool test_nonce(struct work *work, uint32_t nonce)
 
 // void sha256_transf(sha256_ctx *ctx, const unsigned char *message, unsigned int block_nb)
 
-    sub_block = ctx.block;
+//    sub_block = ctx.block;
 
-    for (j = 0; j < 16; j++) {
-        PACK32(&sub_block[j << 2], &w[j]);
+    for (j = 0; j < 8; j++) {
+//        PACK32(ctx.block[j << 2], &w[j]);
+		w[j] = ctx.block[(j << 2) + 3] | (ctx.block[(j << 2) + 2] << 8) | (ctx.block[(j << 2) + 1] << 16) | (ctx.block[(j << 2)] << 24);
     }
 
-    for (j = 16; j < 64; j++) {
-        SHA256_SCR(j);
-    }
+//	w[8] = 0x80000000;
+//	w[9] = 0x00000000;
+//	w[10] = 0x00000000;
+//	w[11] = 0x00000000;
+//	w[12] = 0x00000000;
+//	w[13] = 0x00000000;
+//	w[14] = 0x00000000;
+//	w[15] = 0x00000100;
+	
+	w[16] =  SHA256_F3(w[1]) + w[0];
+	w[17] =  0x00A00000 + SHA256_F3(w[2]) + w[1];
+	w[18] =  SHA256_F4(w[16]) + SHA256_F3(w[3]) + w[2];
+	w[19] =  SHA256_F4(w[17]) + SHA256_F3(w[4]) + w[3];
+	w[20] =  SHA256_F4(w[18]) + SHA256_F3(w[5]) + w[4];
+	w[21] =  SHA256_F4(w[19]) + SHA256_F3(w[6]) + w[5];
+	w[22] =  SHA256_F4(w[20]) + 0x00000100 + SHA256_F3(w[7]) + w[6];
+	w[23] =  SHA256_F4(w[21]) + w[16] + 0x11002000 + w[7];
+	w[24] =  SHA256_F4(w[22]) + w[17] + 0x80000000;
+	w[25] =  SHA256_F4(w[23]) + w[18];
+	w[26] =  SHA256_F4(w[24]) + w[19];
+	w[27] =  SHA256_F4(w[25]) + w[20];
+	w[28] =  SHA256_F4(w[26]) + w[21];
+	w[29] =  SHA256_F4(w[27]) + w[22];
+	w[30] =  SHA256_F4(w[28]) + w[23] + 0x00400022;
+	w[31] =  SHA256_F4(w[29]) + w[24] + SHA256_F3(w[16]) + 0x00000100;
+	
+    for (j = 32; j < 64; j++) {
+//        SHA256_SCR(j);
+		w[j] =  SHA256_F4(w[j -  2]) + w[j -  7] + SHA256_F3(w[j - 15]) + w[j - 16];
+	}
 
 	t1 = ctx.h[7] + SHA256_F2(ctx.h[4]) + CH(ctx.h[4], ctx.h[5], ctx.h[6]) + sha256_k1[0] + w[0];
 	t2 = SHA256_F1(ctx.h[0]) + MAJ(ctx.h[0], ctx.h[1], ctx.h[2]);
@@ -7250,42 +7278,42 @@ bool test_nonce(struct work *work, uint32_t nonce)
 	wv[4] = wv[4] + t1;
 	wv[0] = t1 + t2;
 
-	t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k1[8] + w[8];
+	t1 = wv[7] + SHA256_F2(wv[4]) + CH(wv[4], wv[5], wv[6]) + sha256_k1[8] + 0x80000000;
 	t2 = SHA256_F1(wv[0]) + MAJ(wv[0], wv[1], wv[2]);
 	wv[3] = wv[3] + t1;
 	wv[7] = t1 + t2;
 
-	t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k1[9] + w[9];
+	t1 = wv[6] + SHA256_F2(wv[3]) + CH(wv[3], wv[4], wv[5]) + sha256_k1[9];
 	t2 = SHA256_F1(wv[7]) + MAJ(wv[7], wv[0], wv[1]);
 	wv[2] = wv[2] + t1;
 	wv[6] = t1 + t2;
 
-	t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k1[10] + w[10];
+	t1 = wv[5] + SHA256_F2(wv[2]) + CH(wv[2], wv[3], wv[4]) + sha256_k1[10];
 	t2 = SHA256_F1(wv[6]) + MAJ(wv[6], wv[7], wv[0]);
 	wv[1] = wv[1] + t1;
 	wv[5] = t1 + t2;
 
-	t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k1[11] + w[11];
+	t1 = wv[4] + SHA256_F2(wv[1]) + CH(wv[1], wv[2], wv[3]) + sha256_k1[11];
 	t2 = SHA256_F1(wv[5]) + MAJ(wv[5], wv[6], wv[7]);
 	wv[0] = wv[0] + t1;
 	wv[4] = t1 + t2;
 
-	t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k1[12] + w[12];
+	t1 = wv[3] + SHA256_F2(wv[0]) + CH(wv[0], wv[1], wv[2]) + sha256_k1[12];
 	t2 = SHA256_F1(wv[4]) + MAJ(wv[4], wv[5], wv[6]);
 	wv[7] = wv[7] + t1;
 	wv[3] = t1 + t2;
 
-	t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k1[13] + w[13];
+	t1 = wv[2] + SHA256_F2(wv[7]) + CH(wv[7], wv[0], wv[1]) + sha256_k1[13];
 	t2 = SHA256_F1(wv[3]) + MAJ(wv[3], wv[4], wv[5]);
 	wv[6] = wv[6] + t1;
 	wv[2] = t1 + t2;
 
-	t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k1[14] + w[14];
+	t1 = wv[1] + SHA256_F2(wv[6]) + CH(wv[6], wv[7], wv[0]) + sha256_k1[14];
 	t2 = SHA256_F1(wv[2]) + MAJ(wv[2], wv[3], wv[4]);
 	wv[5] = wv[5] + t1;
 	wv[1] = t1 + t2;
 
-	t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k1[15] + w[15];
+	t1 = wv[0] + SHA256_F2(wv[5]) + CH(wv[5], wv[6], wv[7]) + sha256_k1[15] + 0x00000100;
 	t2 = SHA256_F1(wv[1]) + MAJ(wv[1], wv[2], wv[3]);
 	wv[4] = wv[4] + t1;
 	wv[0] = t1 + t2;
@@ -7533,11 +7561,12 @@ bool test_nonce(struct work *work, uint32_t nonce)
 	wv[4] = wv[4] + t1;
 	wv[0] = t1 + t2;
 
-	for (j = 0; j < 8; j++) {
-		ctx.h[j] += wv[j];
-	}
+//	for (j = 0; j < 8; j++) {
+//		ctx.h[j] += wv[j];
+//	}
 
     for (i = 0 ; i < 8; i++) {
+		ctx.h[i] += wv[i];
         UNPACK32(ctx.h[i], &work->hash[i << 2]);
     }
 	
