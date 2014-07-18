@@ -7569,6 +7569,7 @@ bool test_nonce(struct work *work, uint32_t nonce)
 //    sha256_init(&ctx);
 if (memcmp(mlpdata, swap, 64) == 0){
 	memcpy(ctx.h, mlphash, 32);
+    shifted_message = swap + 64;
 }else{
 
 	memcpy(mlpdata, swap, 64);
@@ -7592,6 +7593,8 @@ if (memcmp(mlpdata, swap, 64) == 0){
 
 	memcpy(mlphash, ctx.h, 32);
 
+}	
+	
     memcpy(ctx.block, shifted_message, 16);
 
 //    ctx.len = 16;
