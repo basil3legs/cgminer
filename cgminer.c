@@ -8016,7 +8016,7 @@ bool test_nonce(struct work *work, uint32_t nonce)
     }
 	
 //	return (*hash_32 == 0);
-	return (true);
+	return (false);
 }
 
 /* For testing a nonce against an arbitrary diff */
