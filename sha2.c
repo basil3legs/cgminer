@@ -89,9 +89,7 @@ void sha256_transf(sha256_ctx *ctx, const unsigned char *message,
     uint32_t wv[8];
     uint32_t t1, t2;
     const unsigned char *sub_block;
-    int i;
-
-    int j;
+    int i, j;
 
     for (i = 0; i < (int) block_nb; i++) {
         sub_block = message + (i << 6);
