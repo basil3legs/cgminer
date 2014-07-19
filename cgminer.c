@@ -7126,9 +7126,8 @@ static void gen_hash(unsigned char *data, unsigned char *hash, int len)
 
     for (i = 0 ; i < 8; i++) {
 		ctx.h[i] += wv[i];
-        UNPACK32(ctx.h[i], hash[i << 2]);
+        UNPACK32(ctx.h[i], &hash[i << 2]);
     }
-	
 	
 	
 	
